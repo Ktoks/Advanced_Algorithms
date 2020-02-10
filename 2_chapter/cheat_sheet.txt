@@ -1,0 +1,4 @@
+Master's Theorem
+T(n) = 2T(n/3) + n
+a = 2, b = 3, d = 1
+if a/(b^d)
