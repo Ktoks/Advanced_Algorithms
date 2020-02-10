@@ -5,7 +5,6 @@
 #include <vector>
 #include <fstream>
 
-
 struct pair {
     int v;
     int weight;
@@ -23,7 +22,6 @@ public:
 	void print_my_graph();
 	void print_to_file(std::string out);
 	void print_cousins(int num);
-	
 
 private:
 	// u: {[v, w],[v,w]}
