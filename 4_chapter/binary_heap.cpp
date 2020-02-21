@@ -40,12 +40,13 @@ int priority_queue::deletemin(){
 
     if (mSize == 0) {
         mTimes[1] += clock() - time_req;
-        return -1;
+        return 0;
     }
     int x = mHeap[0];
-    siftdown(mSize, 0);
     mSize--;
-    mHeap[mSize] = -1;
+    siftdown(mHeap[mSize], 0);
+
+    mHeap[mSize] = 0;
 
     mTimes[1] += clock() - time_req;
     return x;
@@ -60,12 +61,12 @@ int priority_queue::makeheap(std::vector<int> s){
     mHeap.resize(size * 2 + 2);
 
     for(int i = 0; i < size; i++) {
-        mHeap[size + i] = s[i];
-        mSize ++;
+        mHeap[i] = s[i];
+        mSize++;
     }
     // std::cout << "In makeheap" << std::endl;
-    for (int j = mSize - 1; j > 0; j--){
-        siftdown(mHeap[size + j], j);
+    for (int j = 0; j < mSize; j++){
+        siftdown(mHeap[j], j);
     }
     // std::cout << "Past siftdown loop" << std::endl;
     mTimes[0] += clock() - time_req;
@@ -84,13 +85,14 @@ void priority_queue::bubbleup(int x, int i){
 
 void priority_queue::siftdown(int x, int i){
     int c = minchild(i);
-    mHeap[i] = x;
-
+    if (i == 0) {
+        mHeap[i] = x;
+    }
     // so long as c is not negative and 
-    while (c > 0 and mHeap[c] < mHeap[i]) {
+    while (c != 0 and mHeap[c] < mHeap[i]) {
         int temp = mHeap[i];
         mHeap[i] = mHeap[c];
-        mHeap[c] = temp;        // swap
+        mHeap[c] = temp;
         i = c;
         c = minchild(i);
     }
@@ -101,7 +103,7 @@ void priority_queue::siftdown(int x, int i){
 int priority_queue::minchild(int i){
     int leftChild = 2 * i + 1;
     if (leftChild > mSize) {
-        return -1;
+        return 0;
     }
     int rightChild = 2 * i + 2;
     if (rightChild < mSize) {
