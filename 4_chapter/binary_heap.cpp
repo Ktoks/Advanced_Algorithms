@@ -2,11 +2,11 @@
 #include <algorithm>
 
 
-priority_queue::priority_queue(std::vector<int> heap, int size):
+priority_queue::priority_queue(std::vector<int> dists, std::vector<int> verts, int size):
     mSize(size)
 {
     // mHeap.resize(mSize * 2);
-    makeheap(heap);
+    makeheap(verts, dists);
 }
 
 priority_queue::~priority_queue(){
@@ -28,45 +28,56 @@ void priority_queue::decreasekey(int x){
     double time_req;
     time_req = clock();
     // pass heap, val to be changed, and location 
-
-    bubbleup(x,mHeap[x]);
+    int temp;
+    for (int i = 0; i < mVerts.size(); i++) {
+        if (mVerts[i] == x) {
+            temp = i;
+            break;
+        }
+    }
+    bubbleup(x,temp);
     mTimes[3] += clock() - time_req;
 
 }
 
-int priority_queue::deletemin(){
+std::pair<int, int> priority_queue::deletemin(){
     double time_req;
     time_req = clock();
 
     if (mSize == 0) {
         mTimes[1] += clock() - time_req;
-        return 0;
+        return {0, 0};
     }
-    int x = mHeap[0];
+    std::pair<int, int> x;
+    x.first = mVerts[0];
+    x.second = mDists[0];
     mSize--;
-    siftdown(mHeap[mSize], 0);
+    siftdown({mVerts[mSize], mDists[mSize]}, 0);
 
-    mHeap[mSize] = 0;
+    mVerts[mSize] = 0;
+    mDists[mSize] = 0;
 
     mTimes[1] += clock() - time_req;
     return x;
 }
 
-int priority_queue::makeheap(std::vector<int> s){
+int priority_queue::makeheap(std::vector<int> s, std::vector<int> dists){
     // mSize = s.size();
     double time_req;
     time_req = clock();
     mSize = 0;
     int size = s.size();
-    mHeap.resize(size * 2 + 2);
+    mVerts.resize(size * 2 + 2);
+    mDists.resize(size * 2 + 2);
 
     for(int i = 0; i < size; i++) {
-        mHeap[i] = s[i];
+        mVerts[i] = s[i];
+        mDists[i] = dists[i];
         mSize++;
     }
     // std::cout << "In makeheap" << std::endl;
     for (int j = 0; j < mSize; j++){
-        siftdown(mHeap[j], j);
+        siftdown({mVerts[j], mDists[j]}, j);
     }
     // std::cout << "Past siftdown loop" << std::endl;
     mTimes[0] += clock() - time_req;
@@ -75,24 +86,31 @@ int priority_queue::makeheap(std::vector<int> s){
 void priority_queue::bubbleup(int x, int i){
     int p = i/2 + (i % 2 != 0);
     // while we haven't reached the beginning, and targeted i > current i
-    while (i != 1 and mHeap[p] > x) {
-        mHeap[i] = mHeap[p];
+    while (i != 1 and mDists[p] > mDists[x]) {
+        int temp_vert = mVerts[i];
+        int temp_dist = mDists[i];
+        mVerts[i] = mVerts[p];
+        mDists[i] = mDists[p];
         i = p;
         p = i/2 + (i % 2 != 0);
     }
-    mHeap[i] = x;
+    mVerts[i] = x;
 }
 
-void priority_queue::siftdown(int x, int i){
+void priority_queue::siftdown(std::pair<int, int> x, int i){
     int c = minchild(i);
     if (i == 0) {
-        mHeap[i] = x;
+        mVerts[i] = x.first;
+        mDists[i] = x.second;
     }
-    // so long as c is not negative and 
-    while (c != 0 and mHeap[c] < mHeap[i]) {
-        int temp = mHeap[i];
-        mHeap[i] = mHeap[c];
-        mHeap[c] = temp;
+
+    while (c != 0 and mDists[c] < x.second) {
+        int temp_verts = mVerts[i];
+        int temp_dists = mDists[i];
+        mVerts[i] = mVerts[c];
+        mDists[i] = mDists[c];
+        mVerts[c] = temp_verts;
+        mDists[c] = temp_dists;
         i = c;
         c = minchild(i);
     }
@@ -107,7 +125,7 @@ int priority_queue::minchild(int i){
     }
     int rightChild = 2 * i + 2;
     if (rightChild < mSize) {
-        if ( (mHeap[leftChild]) < mHeap[rightChild]) {
+        if ( (mDists[leftChild]) < mDists[rightChild]) {
             return leftChild;
         }
         return rightChild;

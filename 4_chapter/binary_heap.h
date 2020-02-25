@@ -7,25 +7,22 @@
 #include <ctime>
 
 
-struct pair {
-    int v;
-    int w;
-};
+extern int INFINITY;
 
 
 class priority_queue {
     
 public:
-    priority_queue(std::vector<int> heap, int size);
+    priority_queue(std::vector<int> verts, std::vector<int> dists, int size);
     ~priority_queue();
     void insert(int x);
     void decreasekey(int x);
 
-    int deletemin();
-    int makeheap(std::vector<int> s);
+    std::pair<int, int> deletemin();
+    int makeheap(std::vector<int> verts, std::vector<int> dists);
 
     void bubbleup(int x, int i);
-    void siftdown(int x, int i);
+    void siftdown(std::pair<int, int> x, int i);
     int minchild(int i);
 
     int getSize();
@@ -34,7 +31,8 @@ public:
 
 
 private:
-    std::vector<int> mHeap;
+    std::vector<int> mVerts;
+    std::vector<int> mDists;
     int mSize;
     double mTimes[4];
     // 0 = makeheap()
