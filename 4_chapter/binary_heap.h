@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include <ctime>
+#include <map>
+#include <cmath>
 
 
 extern int INFINITY;
@@ -16,7 +18,7 @@ public:
     priority_queue(std::vector<int> verts, std::vector<int> dists, int size);
     ~priority_queue();
     void insert(int x);
-    void decreasekey(int x);
+    void decreasekey(int index, int x);
 
     std::pair<int, int> deletemin();
     int makeheap(std::vector<int> verts, std::vector<int> dists);
@@ -28,7 +30,6 @@ public:
     int getSize();
     bool empty();
     double* getTimes();
-
 
 private:
     std::vector<int> mVerts;
