@@ -9,6 +9,9 @@ priority_queue::priority_queue(std::vector<int> dists, std::vector<int> verts, i
     mTimes[2] = 0;
     mTimes[3] = 0;
     makeheap(verts, dists);
+    for (int i = 0; i < mSize; i++) {
+        mPrevs[i] = 0;
+    }
 }
 
 priority_queue::~priority_queue()
@@ -151,3 +154,12 @@ double *priority_queue::getTimes()
 {
     return mTimes;
 }
+
+void priority_queue::setWeight(int index, int value){
+    mDists[index] = value;
+}
+
+void priority_queue::setPrev(int index, int value){
+    mPrevs[index] = value;
+}
+
