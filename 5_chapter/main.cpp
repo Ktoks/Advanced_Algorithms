@@ -1,31 +1,33 @@
 #include "binary_heap.h"
+#include "graph.h"
 
 main()
 {
-    std::vector<int> test_verts;
-    std::vector<int> test_weights;
+	std::vector<int> verts;
+	std::vector<int> weights;
 
-    int size = std::pow(2, 20);
+	int size = std::pow(2, 20);
 
-    test_verts.resize(size);
-    test_weights.resize(size);
-    for (int i = 0; i < size; i++)
-    {
-        test_verts[i] = i;
-        test_weights[i] = size - i;
-    }
-    priority_queue queue(test_verts, test_weights, size);
+	verts.resize(size);
+	weights.resize(size);
+	for (int i = 0; i < size; i++)
+	{
+		verts[i] = i;
+		weights[i] = size - i;
+	}
+	verts[0] = 0;
+	weights[0] = 0;
+	binaryHeap heap(verts, weights, size);
 
-    for (int v = 0; v < test_verts.size(); v++) {
-        queue.setWeight(v, INFINITY);
-        queue.setPrev(v, 0);
-    }
-    std::pair<int, int> u = {0,0};
-    // queue.setWeight(0, 0);
-    queue.siftdown(u, 0);
-    while (!queue.empty()) {
-        u = queue.deletemin();
-        // for ()
-    }
+	while (!heap.empty()) {
+		u = heap.deletemin();
+		for (int v = 0; v < EDGES; v++) {
+			if (heap.getWeight(v) > distance_of(u,v)) {
+				heap.setWeight(v, distance_of(u, v));heap   // prim, not heap
+				heap.decreasekey(v, heap.getWeight(v));
+				setPrev(v, u.first);                        // prim or graph
+			}
+		}
+	}
 
 }
