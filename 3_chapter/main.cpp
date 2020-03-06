@@ -10,7 +10,7 @@ int main() {
         std::cout << "Unable to read file" << std::endl;
     }
 
-    std::map<int, std::vector<pair>> the_map;
+    std::map<int, std::vector<std::pair<int, int> >> the_map;
     
     int num_verts, g_u, g_v, g_w;
 

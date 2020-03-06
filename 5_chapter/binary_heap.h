@@ -9,9 +9,6 @@
 #include <cmath>
 
 
-extern int INFINITY;
-
-
 class binaryHeap {
 	
 public:
@@ -20,7 +17,7 @@ public:
 	void insert(int x);
 	void decreasekey(int index, int x);
 
-	std::pair<int, int> deletemin();
+	int deletemin();
 	int makeheap(std::vector<int> verts, std::vector<int> dists);
 
 	void bubbleup(int x, int i);
@@ -30,15 +27,12 @@ public:
 	int getSize();
 	bool empty();
 	double* getTimes();
-	void setWeight(int index, int value);
-	void setPrev(int index, int value);
 	int getWeight(int index);
 	
 
 private:
 	std::vector<int> mVerts;
 	std::vector<int> mDists;
-	std::vector<int> mPrevs;
 	int mSize;
 	double mTimes[4];
 	// 0 = makeheap()

@@ -3,15 +3,11 @@
 
 binaryHeap::binaryHeap(std::vector<int> dists, std::vector<int> verts, int size) : mSize(size)
 {
-	// mHeap.resize(mSize * 2);
 	mTimes[0] = 0;
 	mTimes[1] = 0;
 	mTimes[2] = 0;
 	mTimes[3] = 0;
 	makeheap(verts, dists);
-	for (int i = 0; i < mSize; i++) {
-		mPrevs[i] = 0;
-	}
 }
 
 binaryHeap::~binaryHeap()
@@ -39,7 +35,7 @@ void binaryHeap::decreasekey(int index, int x)
 	mTimes[3] += clock() - time_req;
 }
 
-std::pair<int, int> binaryHeap::deletemin()
+int binaryHeap::deletemin()
 {
 	double time_req;
 	time_req = clock();
@@ -47,11 +43,14 @@ std::pair<int, int> binaryHeap::deletemin()
 	if (mSize == 0)
 	{
 		mTimes[1] += clock() - time_req;
-		return {0, 0};
+		return 0;
 	}
-	std::pair<int, int> x;
-	x.first = mVerts[0];
-	x.second = mDists[0];
+
+	// std::pair<int, int> x;
+	// x.first = mVerts[0];
+	// x.second = mDists[0];
+	int x = mVerts[0];
+	
 	mSize--;
 	siftdown({mVerts[mSize], mDists[mSize]}, 0);
 
@@ -155,14 +154,7 @@ double *binaryHeap::getTimes()
 	return mTimes;
 }
 
-void binaryHeap::setWeight(int index, int value){
-	mDists[index] = value;
-}
-
-void binaryHeap::setPrev(int index, int value){
-	mPrevs[index] = value;
-}
-
 int binaryHeap::getWeight(int index){
 	return mDists[index];
 }
+

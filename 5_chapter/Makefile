@@ -1,7 +1,7 @@
 CXXFLAGS := -std=c++11
 
 main: main.o binary_heap.o graph.o
-	g++ $(CXXFLAGS) -o main main.o binary_heap.o graph.0
+	g++ $(CXXFLAGS) -o main main.o binary_heap.o graph.o
 
 main.o: main.cpp binary_heap.h graph.h
 	g++ $(CXXFLAGS) -c main.cpp
