@@ -21,15 +21,22 @@ public:
 	int size();
 	std::map<int, std::vector <std::pair <int, int> > >::iterator start();
 	std::map<int, std::vector <std::pair <int, int> > >::iterator finish();
-	void remove(int index);
+	// void remove(int index);
 	std::vector< std::pair<int, int> > at(int index);
+	int getWeightFromVert(int index);
+	int getPrevFromVert(int index);
+	int mVisitedSize();
+	std::vector<std::pair<int, int>> operator[](int);
+	int pairsize(int);
+
+
 
 
 private:
 	// u: {[v, w],[v,w]}
 	std::map<int, std::vector< std::pair<int, int> >> mGraph;
-	// index: [pre, post, cc, weight]
-	std::map<int, int[4]> mVisited;
+	// index: [pre, post, cc, weight from first node, prev]
+	std::map<int, int[5]> mVisited;
 	int mNum;
 	int mcc;
 	int current_weight;

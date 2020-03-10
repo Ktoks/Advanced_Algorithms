@@ -17,7 +17,7 @@ public:
 	void insert(int x);
 	void decreasekey(int index, int x);
 
-	int deletemin();
+	std::pair<int, int> deletemin();
 	int makeheap(std::vector<int> verts, std::vector<int> dists);
 
 	void bubbleup(int x, int i);

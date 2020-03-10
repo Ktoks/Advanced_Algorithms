@@ -22,6 +22,7 @@ void graph::setStart(int num) {
 }
 
 void graph::explore(int num){
+	// if not visited at all or if mVisited[num][3] > current_weight:
 	if (mVisited.count(num) == 0){
 		mVisited[num][0] = mNum;
 		mVisited[num][2] = mcc;
@@ -30,9 +31,11 @@ void graph::explore(int num){
 
 		for (size_t i = 0; i < mGraph[num].size(); i++) {
 
-			if (mVisited.count(mGraph[num][i].first) == 0) {
-				current_weight += mGraph[num][i].second;
-				explore(mGraph[num][i].first);
+			if (mVisited.count(mGraph[num][i].first) == 0 || mVisited[i][3] > (current_weight + mGraph[num][i].second) ) {
+				current_weight += mGraph[num][i].second;		// add new edgeweight as we go down tree
+				mVisited[i][4] = num;							// set i's new prev
+				explore(mGraph[num][i].first);					// re-explore to update mst
+				current_weight -= mGraph[num][i].second;		// recalculate as we go back up the tree
 			}
 		}
 		mVisited[num][1] = mNum;
@@ -40,8 +43,18 @@ void graph::explore(int num){
 	}
 }
 
+void graph::dfs(){
+	// for (size_t i = 1; i < mGraph.size(); i++) {
+	for (size_t i = 0; i < mGraph.size(); i++) {
+		if (mVisited.count(i) == 0){
+			explore(i);
+			mcc++;
+		}
+	}
+}
+
 void graph::print_my_graph() {
-	for (std::map<int, int[4]>::iterator it = mVisited.begin(); it != mVisited.end(); it++) {
+	for (std::map<int, int[5]>::iterator it = mVisited.begin(); it != mVisited.end(); it++) {
 		std::cout << "vertice " << it->first << ": pre: " << mVisited[it->first][0] << " post: " << mVisited[it->first][1] << std::endl;
 		for(int i = 0; i < mGraph[it->first].size(); i++) {
 			std::cout << it->first << "'s weight to " << mGraph[it->first][i].first << ": " << mGraph[it->first][i].second << std::endl;
@@ -52,7 +65,7 @@ void graph::print_my_graph() {
 void graph::print_to_file(std::string out) {
 	std::ofstream outfile;
 	outfile.open(out);
-	for (std::map<int, int[4]>::iterator it = mVisited.begin(); it != mVisited.end(); it++) {
+	for (std::map<int, int[5]>::iterator it = mVisited.begin(); it != mVisited.end(); it++) {
 		outfile << it->first << " " << mVisited[it->first][0] << " " << mVisited[it->first][1] << " " << mVisited[it->first][2] << std::endl;
 	}
 }
@@ -64,15 +77,6 @@ void graph::print_cousins(int num) {
         std::cout << g_1[cuz].first <<  ", ";
     }
     std::cout << std::endl;
-}
-
-void graph::dfs(){
-	for (size_t i = 1; i < mGraph.size(); i++) {
-		if (mVisited.count(i) == 0){
-			explore(i);
-			mcc++;
-		}
-	}
 }
 
 int graph::size(){
@@ -89,10 +93,31 @@ std::map<int, std::vector <std::pair<int, int> > >::iterator graph::finish() {
 	return it;
 }
 
-void graph::remove(int index){
-	mGraph.erase(index);
-}
+// void graph::remove(int index){
+// 	mGraph.erase(index);
+// }
 
 std::vector< std::pair<int, int> > graph::at(int index){
 	return mGraph.at(index);
 }
+
+int graph::getWeightFromVert(int index) {
+	return mVisited[index][3];
+}
+
+int graph::getPrevFromVert(int index) {
+	return mVisited[index][4];
+}
+
+int graph::mVisitedSize(){
+	return mVisited.size();
+}
+
+std::vector<std::pair<int, int>> graph::operator[](int index) {
+	return mGraph[index];
+}
+
+int graph::pairsize(int index) {
+	return mGraph[index].size();
+}
+
