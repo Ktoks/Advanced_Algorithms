@@ -12,32 +12,28 @@ int min(int one, int two, int three) {
 }
 
 
+
 int edit_distance(std::string first, std::string second) {
 	int first_size = first.size();
 	int second_size = second.size();
 	int distance[first_size + 1][second_size + 1];
-
+	
 	for (int i = 0; i <= first_size; i++) {
 		for (int j = 0; j <= second_size; j++) {
 			if (i == 0) {
 				distance[i][j] = j;
 			}
-
 			else if (j == 0) {
 				distance[i][j] = i;
 			}
-
 			else if (first[i - 1] == second[i - 1]) {
 				distance[i][j] = distance[i - 1][j - 1];
 			}
-
 			else {
 				distance[i][j] = 1 + min(distance[i][j - 1],		// insert
 										distance[i - 1][j],			// remove
 										distance[i - 1][j - 1]);	// replace
 			}
-
-
 		}
 	}
 	return distance[first_size][second_size];
